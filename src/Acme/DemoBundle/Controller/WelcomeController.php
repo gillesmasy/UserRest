@@ -4,8 +4,13 @@ namespace Acme\DemoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 class WelcomeController extends Controller
 {
+    /**
+     * @Template
+     */
     public function indexAction()
     {
         /*
@@ -13,6 +18,7 @@ class WelcomeController extends Controller
          * or @Template annotation as demonstrated in DemoController.
          *
          */
-        return $this->render('AcmeDemoBundle:Welcome:index.html.twig');
+        //return $this->render('AcmeDemoBundle:Welcome:index.html.twig');
+        return array();
     }
 }

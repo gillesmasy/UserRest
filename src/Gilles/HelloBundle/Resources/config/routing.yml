@@ -1,0 +1,34 @@
+_hello:
+    pattern:  /hello/{name}
+    defaults: { _controller: GillesHelloBundle:Default:index }
+
+_hello_get:
+    pattern:  /get/{id}
+    defaults: { _controller: GillesHelloBundle:Default:get }
+        
+_hello_create:
+    pattern:  /create/
+    defaults: { _controller: GillesHelloBundle:Default:create }
+  
+_hello_update:
+    pattern:  /update/
+    defaults: { _controller: GillesHelloBundle:Default:update }
+  
+_hello_delete:
+    pattern:  /delete/{id}
+    defaults: { _controller: GillesHelloBundle:Default:delete }
+
+_hello_login:  
+    pattern:  /secure/login
+    defaults: { _controller: GillesHelloBundle:Secure:login }
+    
+_hello_security_check:
+    pattern:  /secure/security_check
+
+_hello_logout:
+    pattern:  /secure/logout
+    defaults: { _controller: GillesHelloBundle:Secure:logout }
+
+_hello_list:
+    pattern:  /secure/list
+    defaults: { _controller: GillesHelloBundle:Secure:list }
