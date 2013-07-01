@@ -14,16 +14,16 @@ security:
                     admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
 
     firewalls:
-        dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+        #dev:
+        #    pattern:  ^/(_(profiler|wdt)|css|images|js)/
+        #    security: false
 
         login:
-            pattern:  ^/hello/secure/login$
+            pattern:  ^/secure/login$
             security: false
 
         secured_area:
-            pattern:    ^/hello/secure/
+            pattern:    ^/secure/
             form_login:
                 check_path: _hello_security_check
                 login_path: _hello_login
@@ -36,5 +36,5 @@ security:
 
     access_control:
         #- { path: ^/demo/secured/hello/admin/, roles: ROLE_ADMIN }
-        - { path: ^/hello/secure, roles: ROLE_ADMIN }
+        - { path: ^/secure/, roles: ROLE_ADMIN }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
