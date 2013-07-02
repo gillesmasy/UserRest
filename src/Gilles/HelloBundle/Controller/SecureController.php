@@ -16,18 +16,22 @@ class SecureController extends Controller
      * @Route("/", name="_hello_list")
      * @Template
      */
-    public function ListAction(){
+    public function ListAction()
+    {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException();
+        }
         
+        return array();
     }
     
     /**
      * @Route("/login_check", name="_hello_security_check")
      */
-    public function securityCheckAction()
+    public function securityCheckAction(Request $request)
     {
-        // The security layer will intercept this request
     }
-    
+     
     /**
      * @Route("/", name="_hello_login")
      * @Template
@@ -50,14 +54,6 @@ class SecureController extends Controller
             'last_username' => $session->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
         ));
-    }
-    
-    /**
-     * @Route("/", name="_hello_logout")
-     * @Template
-     */
-    public function logoutAction(){
-        
     }
 }
 

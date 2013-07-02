@@ -10,18 +10,20 @@ namespace Gilles\HelloBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 use Gilles\HelloBundle\Validator\Constraints as GillesAssert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="utilisateur")
  */
-class Utilisateur {
+class Utilisateur implements UserInterface, \Serializable {
     
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
     
@@ -151,5 +153,52 @@ class Utilisateur {
     public function getPassword()
     {
         return $this->password;
+    }
+    
+    /*
+     * Implements UserInterface
+     */
+    public function getRoles(){
+        //Pour des raisons de facilité (et exigence du projet), on considère que tous les utilisateurs, une fois authentifié, sont admin
+        return array('ROLE_ADMIN');
+    }
+    
+    //public function getPassword();
+    public function getSalt(){
+        return "Th1s_1s-a_sal7!";
+    }
+    
+    public function getUsername(){
+        //Considérons que l'email est le login
+        return $this->getMail();
+    }
+    
+    public function eraseCredentials(){
+        //$this->setPassword(null);
+        //$this->setMail(null);
+    }
+    
+    /*
+     * Implements Serializable
+     * http://symfony.com/fr/doc/2.2/book/security.html#charger-les-utilisateurs-de-la-base-de-donnees
+     */
+    public function serialize(){
+        return serialize(array(
+            'id' => $this->id,
+            'name' => $this->name,
+            'firstname' => $this->firstname,
+            'mail' => $this->mail,
+            'password' => $this->password,
+        ));
+    }
+    
+    public function unserialize($serializedData){
+        $rawData = unserialize($serializedData);
+        
+        $this->id = $rawData['id'];
+        $this->name = $rawData['name'];
+        $this->firstname = $rawData['firstname'];
+        $this->mail = $rawData['mail'];
+        $this->password = $rawData['password'];
     }
 }

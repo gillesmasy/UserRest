@@ -16,9 +16,9 @@ class DefaultController extends Controller
      * @Route("/", name="_hello")
      * @Template
      */
-    public function indexAction($name)
+    public function indexAction($name =null)
     {
-        return array('name' => $name);
+        return array('name' =>(null === $name) ? 'Inconnu' : $name);
     }
     
     /*
@@ -33,7 +33,11 @@ class DefaultController extends Controller
         $user->setName("Masy");
         $user->setFirstname("Gilles");
         $user->setMail("gilles.masy@gmail.com");
-        $user->setPassword("test");
+        
+        $factory = $this->get('security.encoder_factory');
+        $encoder = $factory->getEncoder($user);
+        $password = $encoder->encodePassword('test', $user->getSalt());
+        $user->setPassword($password);
         
         $validator = $this->get('validator');
         $errorList = $validator->validate($user);
