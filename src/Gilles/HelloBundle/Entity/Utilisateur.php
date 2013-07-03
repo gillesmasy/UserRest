@@ -29,26 +29,26 @@ class Utilisateur implements UserInterface, \Serializable {
     
     /**
      * @ORM\Column(type="string", length=64)
-     * @Assert\NotNull(message="Le nom doit être renseigné.")
+     * @Assert\NotBlank(message="Le nom doit être renseigné.")
      */
     protected $name;
     
     /**
      * @ORM\Column(type="string", length=64)
-     * @Assert\NotNull(message="Le prénom doit être renseigné.")
+     * @Assert\NotBlank(message="Le prénom doit être renseigné.")
      */
     protected $firstname;
     
     /**
      * @ORM\Column(type="string", length=128)
-     * @Assert\NotNull(message="L'adresse e-mail doit être renseignée")
+     * @Assert\NotBlank(message="L'adresse e-mail doit être renseignée")
      * @Assert\Email(message="L'adresse '{{ value }}' n'est pas une adresse e-mail valide.")
      */
     protected $mail;
     
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotNull(message="Le password doit être renseigné.")
+     * @Assert\NotBlank(message="Le password doit être renseigné.")
      * @GillesAssert\PasswordStrategy
      */
     protected $password;
@@ -58,6 +58,9 @@ class Utilisateur implements UserInterface, \Serializable {
     public function __construct(array $data, $factoryEncoder){
         $this->encoderFactory = $factoryEncoder;
         
+        $this->update($data);
+    }
+    public function update(array $data){
         if($data){
             if(isset($data['name']))      $this->setName($data['name']);
             if(isset($data['firstname'])) $this->setFirstname($data['firstname']);
@@ -217,5 +220,16 @@ class Utilisateur implements UserInterface, \Serializable {
         $this->firstname = $rawData['firstname'];
         $this->mail = $rawData['mail'];
         $this->password = $rawData['password'];
+    }
+    
+    public function toJson(){
+        return json_encode(
+                array(
+                    'id' => $this->getId(),
+                    'name' => $this->getName(),
+                    'firstname' => $this->getFirstname(),
+                    'mail' => $this->getMail(),
+                )
+        );
     }
 }

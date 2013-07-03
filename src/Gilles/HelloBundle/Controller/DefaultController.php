@@ -4,8 +4,6 @@ namespace Gilles\HelloBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -18,19 +16,17 @@ class DefaultController extends Controller
      * @Route("/", name="_hello")
      * @Template
      */
-    public function indexAction($name =null)
-    {
+    public function indexAction($name =null){
         return array('name' => $name);
     }
     
     /*
-     * @Route("/Create", name="_hello_create")
+     * @Route("/rest", name="_hello_create")
      */
-    public function CreateAction(Request $request)
-    {
+    public function CreateAction(){
         $response = new Response();
         
-        $content = $request->getContent();
+        $content = $this->get('request')->getContent();
         if(! $content){
             //Retour BAD REQUEST - sans texte
             return $response
@@ -51,7 +47,9 @@ class DefaultController extends Controller
             $em->flush();
             
             //Retour OK
-            return $response->setStatusCode(200);
+            return $response
+                    ->setStatusCode(200)
+                    ->setContent($user->getId());
         }else{
             $msgError = array();
             foreach($errorList as $error)
@@ -65,64 +63,115 @@ class DefaultController extends Controller
     }
     
     /*
-     * @Route("/Get", name="_hello_get")
+     * @Route("/rest", name="_hello_get")
      */
-    public function GetAction($id)
-    {
+    public function GetAction($id){
+        $response = new Response();
+        
+        if(! $id){
+            return $response->setStatusCode(400);
+        }
+        
         $user = $this->getDoctrine()
                 ->getRepository('GillesHelloBundle:Utilisateur')
-                ->find($id)
-        ;        
+                ->find($id);        
+        
         if(! $user){
-            throw $this->createNotFoundException('Aucun utilisateur pour cet Id : '.$id);
+            return $response->setStatusCode(400);
         }
         
-        //TODO : réponse JSON de l'entité Utilisateur
-        throw new \Exception('Not Implemented');
+        return $response
+                ->setContent($user->toJson());
     }
     
     /*
-     * @Route("/Update", name="_hello_update")
+     * @Route("/rest", name="_hello_update")
      */
-    public function UpdateAction()
-    {
-        throw new \Exception('Not Implemented');
+    public function UpdateAction($id){
+        $response = new Response();
         
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('GillesHelloBundle:Utilisateur')->find($id);
-        
-        if(! $user){
-            throw $this->createNotFoundException('Aucun utilisateur pour cet Id : '.$id);
+        if(! $id){
+            return $response
+                    ->setStatusCode(400)
+                    ->setContent(json_encode(array('error' => 'Id User Unknown')));
         }
         
-        $user->setName();
-        $user->setFirstname();
-        $user->setMail();
-        $user->setPassword();
+        $user = $this->getDoctrine()
+                ->getRepository('GillesHelloBundle:Utilisateur')
+                ->find($id);
+        if(! $user){
+            return $response->setStatusCode(400)
+                    ->setContent(json_encode(array('error' => 'User Unknown')));
+        }
         
-        //Update
-        $em->flush();
+        $content = $this->get('request')->getContent();
+        if(! $content){
+            //Retour BAD REQUEST - sans texte
+            return $response
+                    ->setStatusCode(400)
+                    ->setContent(json_encode(array('error' => 'No update')));
+        }
         
-        //Retour à la page d'index
-        return $this->redirect($this->generateUrl('index'));
+        //Mettre à jour l'utilisateur
+        $data = json_decode($content, true);
+        $user->update($data);
+        
+        $validator = $this->get('validator');
+        $errorList = $validator->validate($user);
+        
+        //L'utilisateur est validé
+        if(count($errorList) <= 0){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            
+            //Retour OK
+            return $response
+                    ->setStatusCode(200);
+        }else{
+            $msgError = array();
+            foreach($errorList as $error)
+                $msgError[$error->getPropertyPath()]= $error->getMessage();
+            
+            //Retour BAD REQUEST - avec les messages d'erreurs
+            return $response
+                    ->setStatusCode(400)
+                    ->setContent(json_encode($msgError));
+        }
     }
     
     /*
-     * @Route("/Delete", name="_hello_delete")
+     * @Route("/rest", name="_hello_delete")
      */
     public function DeleteAction($id)
     {
-        throw new \Exception('Not Implemented');
+        $response = new Response();
         
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('GillesHelloBundle:Utilisateur')->find($id);
+        if(! $id){
+            //Retour BAD REQUEST - sans texte
+            return $response
+                    ->setStatusCode(400)
+                    ->setContent(json_encode(array('error' => 'No user to delete')));
+        }
+        $data = json_decode($content, true);
         
-        if(! $user){
-            throw $this->createNotFoundException('Aucun utilisateur pour cet Id : '.$id);
+        if(! isset($data['id'])){
+            return $response
+                    ->setStatusCode(400)
+                    ->setContent(json_encode(array('error' => 'Id User Unknown')));
         }
         
-        $em->remove($user);
+        $user = $this->getDoctrine()
+                ->getRepository('GillesHelloBundle:Utilisateur')
+                ->find($data['id']);
         
-        $em->flush();
+        if($user){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($user);
+            $em->flush();
+        }
+        //Si l'utilisateur n'est pas connu, on considère qu'il est déjà supprimé => ce n'est pas un cas d'erreur
+        
+        return $response->setStatusCode(200);
     }
 }
