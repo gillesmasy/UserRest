@@ -4,6 +4,8 @@ namespace Gilles\HelloBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -18,43 +20,47 @@ class DefaultController extends Controller
      */
     public function indexAction($name =null)
     {
-        return array('name' =>(null === $name) ? 'Inconnu' : $name);
+        return array('name' => $name);
     }
     
     /*
      * @Route("/Create", name="_hello_create")
      */
-    public function CreateAction()
+    public function CreateAction(Request $request)
     {
-        throw new \Exception('Not Implemented');
+        $response = new Response();
         
-        $user = new Utilisateur();
+        $content = $request->getContent();
+        if(! $content){
+            //Retour BAD REQUEST - sans texte
+            return $response
+                    ->setStatusCode(400)
+                    ->setContent(json_encode("Empty value"));
+        }
+        $data = json_decode($content, true);
         
-        $user->setName("Masy");
-        $user->setFirstname("Gilles");
-        $user->setMail("gilles.masy@gmail.com");
-        
-        $factory = $this->get('security.encoder_factory');
-        $encoder = $factory->getEncoder($user);
-        $password = $encoder->encodePassword('test', $user->getSalt());
-        $user->setPassword($password);
+        $user = new Utilisateur($data, $this->get('security.encoder_factory'));
         
         $validator = $this->get('validator');
         $errorList = $validator->validate($user);
         
+        //L'utilisateur est validé
         if(count($errorList) <= 0){
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
             
-            //TODO Adapter le message au JSON
-            return new Response('User Created');
+            //Retour OK
+            return $response->setStatusCode(200);
         }else{
-            //TODO Récupérer les erreurs et Adapter le message au JSON
-            $msgError = "";
+            $msgError = array();
             foreach($errorList as $error)
-                $msgError .= $error->getMessage() . "\n";
-            return new Response('Une (ou plusieurs) erreur(s) est/sont survenues : '. $msgError);
+                $msgError[$error->getPropertyPath()]= $error->getMessage();
+            
+            //Retour BAD REQUEST - avec les messages d'erreurs
+            return $response
+                    ->setStatusCode(400)
+                    ->setContent(json_encode($msgError));
         }
     }
     

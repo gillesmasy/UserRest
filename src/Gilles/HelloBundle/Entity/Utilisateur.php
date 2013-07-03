@@ -52,7 +52,20 @@ class Utilisateur implements UserInterface, \Serializable {
      * @GillesAssert\PasswordStrategy
      */
     protected $password;
+    
+    protected $encoderFactory;
 
+    public function __construct(array $data, $factoryEncoder){
+        $this->encoderFactory = $factoryEncoder;
+        
+        if($data){
+            if(isset($data['name']))      $this->setName($data['name']);
+            if(isset($data['firstname'])) $this->setFirstname($data['firstname']);
+            if(isset($data['mail']))      $this->setMail($data['mail']);
+            if(isset($data['password']))  $this->setPassword($data['password']);
+        }
+    }
+    
     /**
      * Get id
      *
@@ -140,8 +153,13 @@ class Utilisateur implements UserInterface, \Serializable {
      */
     public function setPassword($password)
     {
-        $this->password = $password;
-    
+        if($this->encoderFactory){
+            $encoder = $this->encoderFactory->getEncoder($this);
+
+            $this->password = $encoder->encodePassword($password, $this->getSalt());
+        }else
+            throw new \Exception('Factory Encoder is not defined');
+        
         return $this;
     }
 
@@ -163,7 +181,6 @@ class Utilisateur implements UserInterface, \Serializable {
         return array('ROLE_ADMIN');
     }
     
-    //public function getPassword();
     public function getSalt(){
         return "Th1s_1s-a_sal7!";
     }
