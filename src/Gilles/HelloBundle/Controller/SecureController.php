@@ -22,7 +22,12 @@ class SecureController extends Controller
             throw new AccessDeniedException();
         }
         
-        return array();
+        $users = $this->getDoctrine()
+                ->getRepository('GillesHelloBundle:Utilisateur')
+                ->findAll()
+        ;
+        
+        return array('users' => $users);
     }
     
     /**
