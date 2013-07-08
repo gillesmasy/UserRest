@@ -1,8 +1,6 @@
 User REST
 =========
 
-Projet de formation à Symfony 2. 
-<br/><br/>
 L'objectif est de fournir une interface RESTFull servant à l'édtion d'utilisateurs (communication au format JSON), et une page web, fournissant la liste des utilisateurs. Cette page est sécurisée, nécessitant une authentification sur base des utilisateurs présents en base de données.
 <br/><br/>
 Le endpoint est défini à l'adresse ~/rest. Ainsi, au GET, UPDATE et DELETE correspondra l'URL ~/rest/{id}, avec les données communiquées POST si nécessaire, toujours au format JSON.
@@ -19,6 +17,8 @@ Configuration<br/>
     <li> Mysql 5.5 (http://dev.mysql.com/downloads/)
     <li> Symfony 2 (http://symfony.com/download)
 </ul>
+
+Pour déployer la base de données, après avoir modifié le fichier 'parameters.yml' pour y ajouter la configuration de la base de données, user de la commande Symfony 'php app/console doctrine:schema:update --force'
 
 NOTE
     J'ai interprété "champ obligatoire" comme "champ non vide".

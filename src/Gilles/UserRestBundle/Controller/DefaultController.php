@@ -106,7 +106,6 @@ class DefaultController extends Controller
         
         $content = $this->get('request')->getContent();
         if(! $content){
-            //Retour BAD REQUEST - sans texte
             return $response
                     ->setStatusCode(400)
                     ->setContent(json_encode(array('error' => 'No update')));
@@ -114,8 +113,13 @@ class DefaultController extends Controller
         
         //Mettre à jour l'utilisateur
         $data = json_decode($content, true);
-        $user->update($data);
-        
+        if($data)
+            $user->update($data);
+        else
+            return $response
+                    ->setStatusCode(400)
+                    ->setContent(json_encode(array('error' => 'No update')));
+            
         $validator = $this->get('validator');
         $errorList = $validator->validate($user);
         
@@ -143,8 +147,7 @@ class DefaultController extends Controller
     /*
      * @Route("/rest", name="_hello_delete")
      */
-    public function DeleteAction($id)
-    {
+    public function DeleteAction($id){
         $response = new Response();
         
         if(! $id){
@@ -153,17 +156,10 @@ class DefaultController extends Controller
                     ->setStatusCode(400)
                     ->setContent(json_encode(array('error' => 'No user to delete')));
         }
-        $data = json_decode($content, true);
-        
-        if(! isset($data['id'])){
-            return $response
-                    ->setStatusCode(400)
-                    ->setContent(json_encode(array('error' => 'Id User Unknown')));
-        }
         
         $user = $this->getDoctrine()
                 ->getRepository('GillesUserRestBundle:Utilisateur')
-                ->find($data['id']);
+                ->find($id);
         
         if($user){
             $em = $this->getDoctrine()->getManager();
