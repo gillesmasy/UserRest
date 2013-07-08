@@ -13,7 +13,7 @@ La page web est définie à l'adresse ~/secure/list. Si la personne n'est pas au
 Installation
 ------------
 
-Configuration
+Configuration<br/>
     - Serveur Apache 2.2 avec un module PHP 5.3 (http://apache.org/dyn/closer.cgi)
     - Mysql 5.5 (http://dev.mysql.com/downloads/)
     - Symfony 2 (http://symfony.com/download)
