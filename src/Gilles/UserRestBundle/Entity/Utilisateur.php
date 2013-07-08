@@ -56,11 +56,11 @@ class Utilisateur implements UserInterface, \Serializable {
     protected $encoderFactory;
 
     public function __construct(array $data, $factoryEncoder){
+        $this->update($data, $factoryEncoder);
+    }
+    public function update(array $data, $factoryEncoder){
         $this->encoderFactory = $factoryEncoder;
         
-        $this->update($data);
-    }
-    public function update(array $data){
         if($data){
             if(isset($data['name']))      $this->setName($data['name']);
             if(isset($data['firstname'])) $this->setFirstname($data['firstname']);

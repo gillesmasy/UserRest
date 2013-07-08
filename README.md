@@ -19,6 +19,3 @@ Configuration<br/>
 </ul>
 
 Pour déployer la base de données, après avoir modifié le fichier 'parameters.yml' pour y ajouter la configuration de la base de données, user de la commande Symfony 'php app/console doctrine:schema:update --force'
-
-NOTE
-    J'ai interprété "champ obligatoire" comme "champ non vide".

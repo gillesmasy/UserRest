@@ -134,7 +134,7 @@ class DefaultController extends Controller
             //Mettre à jour l'utilisateur
             $data = json_decode($content, true);
             if($data)
-                $user->update($data);
+                $user->update($data, $this->get('security.encoder_factory'));
             else
                 return $response
                         ->setStatusCode(400)
