@@ -1,4 +1,3 @@
 gilles_hello:
     resource: "@GillesUserRestBundle/Resources/config/routing.yml"
     prefix:   /
-
