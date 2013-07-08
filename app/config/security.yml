@@ -1,6 +1,6 @@
 security:
     encoders:
-        Gilles\HelloBundle\Entity\Utilisateur: 
+        Gilles\UserRestBundle\Entity\Utilisateur: 
           algorithm:  sha512
 
     role_hierarchy:
@@ -12,10 +12,6 @@ security:
         entity: { class: Gilles\UserRestBundle\Entity\Utilisateur, property: mail }
 
     firewalls:
-        #dev:
-        #    pattern:  ^/(_(profiler|wdt)|css|images|js)/
-        #    security: false
-
         login:
             pattern:  ^/secure/login$
             security: false
@@ -31,6 +27,4 @@ security:
             anonymous: ~
 
     access_control:
-        #- { path: ^/demo/secured/hello/admin/, roles: ROLE_ADMIN }
         - { path: ^/secure, roles: ROLE_ADMIN }
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
