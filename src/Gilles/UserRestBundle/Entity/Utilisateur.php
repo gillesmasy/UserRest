@@ -6,13 +6,13 @@
  * @author G.Masy
  */
 
-namespace Gilles\HelloBundle\Entity;
+namespace Gilles\UserRestBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-use Gilles\HelloBundle\Validator\Constraints as GillesAssert;
+use Gilles\UserRestBundle\Validator\Constraints as GillesAssert;
 
 /**
  * @ORM\Entity
@@ -194,8 +194,6 @@ class Utilisateur implements UserInterface, \Serializable {
     }
     
     public function eraseCredentials(){
-        //$this->setPassword(null);
-        //$this->setMail(null);
     }
     
     /*

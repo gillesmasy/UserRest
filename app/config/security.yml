@@ -9,7 +9,7 @@ security:
 
     providers:
       main: 
-        entity: { class: Gilles\HelloBundle\Entity\Utilisateur, property: mail }
+        entity: { class: Gilles\UserRestBundle\Entity\Utilisateur, property: mail }
 
     firewalls:
         #dev:

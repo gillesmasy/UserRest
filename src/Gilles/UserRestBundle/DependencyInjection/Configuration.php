@@ -1,6 +1,6 @@
 <?php
 
-namespace Gilles\HelloBundle\DependencyInjection;
+namespace Gilles\UserRestBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

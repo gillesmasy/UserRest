@@ -1,5 +1,5 @@
 parameters:
-#    gilles_hello.example.class: Gilles\HelloBundle\Example
+#    gilles_hello.example.class: Gilles\UserRestBundle\Example
 
 services:
 #    gilles_hello.example:

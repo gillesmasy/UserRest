@@ -1,7 +1,7 @@
 <?php
-// src/Gilles/HelloBundle/Validator/Constraints/PasswordStrategy.php
+// src/Gilles/UserRestBundle/Validator/Constraints/PasswordStrategy.php
 
-namespace Gilles\HelloBundle\Validator\Constraints;
+namespace Gilles\UserRestBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 

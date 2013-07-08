@@ -1,38 +1,38 @@
 _hello:
     pattern:  /hello/{name}
-    defaults: { _controller: GillesHelloBundle:Default:index }
+    defaults: { _controller: GillesUserRestBundle:Default:index }
 
 _hello_get:
     pattern:  /rest/{id}
-    defaults: { _controller: GillesHelloBundle:Default:get, _format: json }
+    defaults: { _controller: GillesUserRestBundle:Default:get, _format: json }
     requirements: { _format: (json), _method: GET}
         
 _hello_create:
     pattern:  /rest
-    defaults: { _controller: GillesHelloBundle:Default:create, _format: json }
+    defaults: { _controller: GillesUserRestBundle:Default:create, _format: json }
     requirements: { _format: (json), _method: POST}
   
 _hello_update:
     pattern:  /rest/{id}
-    defaults: { _controller: GillesHelloBundle:Default:update, _format: json }
+    defaults: { _controller: GillesUserRestBundle:Default:update, _format: json }
     requirements: { _format: (json), _method: PUT}
   
 _hello_delete:
     pattern:  /rest/{id}
-    defaults: { _controller: GillesHelloBundle:Default:delete }
+    defaults: { _controller: GillesUserRestBundle:Default:delete }
     requirements: { _format: (json), _method: DELETE}
 
 _hello_login:  
     pattern:  /secure/login
-    defaults: { _controller: GillesHelloBundle:Secure:login }
+    defaults: { _controller: GillesUserRestBundle:Secure:login }
     
 _hello_security_check:
     pattern:  /secure/security_check
 
 _hello_logout:
     pattern:  /secure/logout
-    defaults: { _controller: GillesHelloBundle:Secure:logout }
+    defaults: { _controller: GillesUserRestBundle:Secure:logout }
 
 _hello_list:
     pattern:  /secure/list
-    defaults: { _controller: GillesHelloBundle:Secure:list }
+    defaults: { _controller: GillesUserRestBundle:Secure:list }

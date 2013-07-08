@@ -1,6 +1,6 @@
 <?php
 
-namespace Gilles\HelloBundle\Controller;
+namespace Gilles\UserRestBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Gilles\HelloBundle\Entity\Utilisateur;
+use Gilles\UserRestBundle\Entity\Utilisateur;
 
 class DefaultController extends Controller
 {
@@ -73,7 +73,7 @@ class DefaultController extends Controller
         }
         
         $user = $this->getDoctrine()
-                ->getRepository('GillesHelloBundle:Utilisateur')
+                ->getRepository('GillesUserRestBundle:Utilisateur')
                 ->find($id);        
         
         if(! $user){
@@ -97,7 +97,7 @@ class DefaultController extends Controller
         }
         
         $user = $this->getDoctrine()
-                ->getRepository('GillesHelloBundle:Utilisateur')
+                ->getRepository('GillesUserRestBundle:Utilisateur')
                 ->find($id);
         if(! $user){
             return $response->setStatusCode(400)
@@ -162,7 +162,7 @@ class DefaultController extends Controller
         }
         
         $user = $this->getDoctrine()
-                ->getRepository('GillesHelloBundle:Utilisateur')
+                ->getRepository('GillesUserRestBundle:Utilisateur')
                 ->find($data['id']);
         
         if($user){
