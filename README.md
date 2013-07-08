@@ -11,7 +11,7 @@ La page web est définie à l'adresse ~/secure/list. Si la personne n'est pas au
 
 
 Installation
-____________
+------------
 
 Configuration
     - Serveur Apache 2.2 avec un module PHP 5.3 (http://apache.org/dyn/closer.cgi)
